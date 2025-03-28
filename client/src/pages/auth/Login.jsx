@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ updateAuth }) => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ const Login = ({ updateAuth }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://cibilbankscore-server-gamma.vercel.app/user/login", {
+      const response = await axios.post("https://tweet-appp-fxj8-server.vercel.app/user/login", {
         email,
         password,
       });

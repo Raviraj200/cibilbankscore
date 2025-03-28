@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { Bell, Check, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
-import { Bell, X, Check } from 'lucide-react';
 
-const socket = io('https://cibilbankscore-server-gamma.vercel.app');
+const socket = io('https://tweet-appp-fxj8-server.vercel.app');
 
 function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
@@ -17,7 +17,7 @@ function NotificationBell() {
     // Fetch notifications from API
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('https://cibilbankscore-server-gamma.vercel.app/api/notifications');
+        const response = await axios.get('https://tweet-appp-fxj8-server.vercel.app/api/notifications');
         setNotifications(response.data);
         setUnreadCount(response.data.filter(notif => !notif.read).length);
         setLoading(false);
@@ -26,9 +26,9 @@ function NotificationBell() {
         setLoading(false);
       }
     };
-    
+
     fetchNotifications();
-    
+
     // Listen for new notifications
     socket.on('notification', (newNotification) => {
       setNotifications(prev => [newNotification, ...prev]);
@@ -39,32 +39,32 @@ function NotificationBell() {
         audio.play().catch(e => console.log('Audio play failed:', e));
       }
     });
-    
+
     // Handle clicks outside the notification panel to close it
     const handleClickOutside = (event) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
-    
+
     // Cleanup
     return () => {
       socket.off('notification');
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString() + ' ' + date.toLocaleDateString();
   };
-  
+
   const markAsRead = async (id) => {
     try {
-      await axios.patch(`https://cibilbankscore-server-gamma.vercel.app/api/notifications/${id}`);
-      setNotifications(prev => prev.map(notif => 
+      await axios.patch(`https://tweet-appp-fxj8-server.vercel.app/api/notifications/${id}`);
+      setNotifications(prev => prev.map(notif =>
         notif._id === id ? { ...notif, read: true } : notif
       ));
       setUnreadCount(prev => prev - 1);
@@ -72,13 +72,13 @@ function NotificationBell() {
       console.error('Error marking notification as read:', err);
     }
   };
-  
+
   const deleteNotification = async (id, e) => {
     // Stop the event from propagating to parent (which would trigger markAsRead)
     e.stopPropagation();
-    
+
     try {
-      await axios.delete(`https://cibilbankscore-server-gamma.vercel.app/api/notifications/${id}`);
+      await axios.delete(`https://tweet-appp-fxj8-server.vercel.app/api/notifications/${id}`);
       // Remove the deleted notification from state
       const deletedNotif = notifications.find(notif => notif._id === id);
       setNotifications(prev => prev.filter(notif => notif._id !== id));
@@ -89,35 +89,35 @@ function NotificationBell() {
       console.error('Error deleting notification:', err);
     }
   };
-  
+
   const markAllAsRead = async () => {
     try {
-      await axios.patch('https://cibilbankscore-server-gamma.vercel.app/api/notifications/mark-all-read');
+      await axios.patch('https://tweet-appp-fxj8-server.vercel.app/api/notifications/mark-all-read');
       setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
       setUnreadCount(0);
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
     }
   };
-  
+
   const clearAllNotifications = async () => {
     try {
-      await axios.delete('https://cibilbankscore-server-gamma.vercel.app/api/notifications');
+      await axios.delete('https://tweet-appp-fxj8-server.vercel.app/api/notifications');
       setNotifications([]);
       setUnreadCount(0);
     } catch (err) {
       console.error('Error clearing notifications:', err);
     }
   };
-  
+
   const toggleNotifications = () => {
     setIsOpen(!isOpen);
   };
-  
+
   return (
     <div className="relative" ref={notificationRef}>
       {/* Bell Icon with Badge */}
-      <div 
+      <div
         className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer transition-all duration-200 relative"
         onClick={toggleNotifications}
       >
@@ -128,7 +128,7 @@ function NotificationBell() {
           </span>
         )}
       </div>
-      
+
       {/* Notifications Panel */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 md:w-96 bg-white rounded-lg shadow-lg overflow-hidden z-50 border border-gray-200">
@@ -137,7 +137,7 @@ function NotificationBell() {
             <h3 className="font-medium text-gray-800">Notifications</h3>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
-                <button 
+                <button
                   className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
                   onClick={markAllAsRead}
                 >
@@ -146,14 +146,14 @@ function NotificationBell() {
                 </button>
               )}
               {notifications.length > 0 && (
-                <button 
+                <button
                   className="text-xs text-gray-600 hover:text-gray-800"
                   onClick={clearAllNotifications}
                 >
                   Clear all
                 </button>
               )}
-              <button 
+              <button
                 className="text-gray-500 hover:text-gray-700 ml-2"
                 onClick={() => setIsOpen(false)}
               >
@@ -161,7 +161,7 @@ function NotificationBell() {
               </button>
             </div>
           </div>
-          
+
           {/* Notification List */}
           <div className="max-h-96 overflow-y-auto">
             {loading ? (
@@ -175,7 +175,7 @@ function NotificationBell() {
               </div>
             ) : (
               notifications.map((notification, index) => (
-                <div 
+                <div
                   key={notification._id || index}
                   className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
                   onClick={() => !notification.read && notification._id && markAsRead(notification._id)}
@@ -187,7 +187,7 @@ function NotificationBell() {
                         {notification.createdAt ? formatDate(notification.createdAt) : 'Just now'}
                       </span>
                       {notification._id && (
-                        <button 
+                        <button
                           className="text-gray-400 hover:text-gray-600 p-1"
                           onClick={(e) => deleteNotification(notification._id, e)}
                         >
@@ -204,13 +204,13 @@ function NotificationBell() {
               ))
             )}
           </div>
-          
+
           {/* Footer - Optional */}
           {notifications.length > 5 && (
             <div className="px-4 py-2 bg-gray-50 border-t border-gray-100 text-center">
-              <button 
+              <button
                 className="text-sm text-blue-600 hover:text-blue-800"
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 View all notifications
               </button>

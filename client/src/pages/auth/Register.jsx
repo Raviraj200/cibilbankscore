@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -23,8 +23,8 @@ const Signup = () => {
     };
 
     try {
-      const response = await axios.post("https://cibilbankscore-server-gamma.vercel.app/user/signup", userInfo);
-      
+      const response = await axios.post("https://tweet-appp-fxj8-server.vercel.app/user/signup", userInfo);
+
       if (response.data) {
         // Clear form and show success
         setName("");
@@ -71,7 +71,7 @@ const Signup = () => {
           {/* Background glows */}
           <div className="absolute -top-10 -left-10 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl opacity-10"></div>
           <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-purple-500 rounded-full filter blur-3xl opacity-10"></div>
-          
+
           {/* Card content */}
           <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
             {/* Card header */}
@@ -206,9 +206,9 @@ const Signup = () => {
                     type="submit"
                     disabled={loading}
                     className={`group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white 
-                    ${loading 
-                      ? "bg-indigo-600/70 cursor-not-allowed" 
-                      : "bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 shadow-lg hover:shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:-translate-y-1"}`}
+                    ${loading
+                        ? "bg-indigo-600/70 cursor-not-allowed"
+                        : "bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 shadow-lg hover:shadow-indigo-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:-translate-y-1"}`}
                   >
                     {loading ? (
                       <span className="flex items-center">

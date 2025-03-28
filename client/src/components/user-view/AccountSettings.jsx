@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState } from "react";
 
 const AccountSettings = ({ user }) => {
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ const AccountSettings = ({ user }) => {
     setSuccessMessage("");
 
     try {
-      const res = await axios.post("https://cibilbankscore-server-gamma.vercel.app/profile/update", formData);
+      const res = await axios.post("https://tweet-appp-fxj8-server.vercel.app/profile/update", formData);
       setSuccessMessage(res.data.message || "Profile updated successfully!");
       setTimeout(() => setSuccessMessage(""), 5000);
     } catch (error) {
